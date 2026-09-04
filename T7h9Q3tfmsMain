@@ -1,7 +1,7 @@
 -- ==========================================
 -- Load UI Library
 -- ==========================================
-local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/zeutronxsite/M3kELKp3QMonkeUI/refs/heads/main/FmQTSqSpK.luau"))()
+local UI = loadstring(game:HttpGet('https://raw.githubusercontent.com/zeutronxsite/M3kELKp3QMonkeUI/refs/heads/main/FmQTSqSpK.luau'))()
 
 UI.Title.Text = "TLK PRISON [CFRAME METHOD]"
 UI.newTab("Main")
@@ -57,7 +57,7 @@ if hookmetamethod and checkcaller then
 end
 
 -- ==========================================
--- CFrame Fly Logic (DIPERBAIKI UNTUK MOBILE/HP)
+-- CFrame Fly Logic
 -- ==========================================
 local flyConnection = nil
 
@@ -83,35 +83,27 @@ local function setupCFrameFly(char)
         local camCF = workspace.CurrentCamera.CFrame
         local moveVector = Vector3.new()
         
-        -- Support for Mobile (Virtual Joystick) & Controller via Humanoid.MoveDirection
-        local humMoveDir = hum.MoveDirection
-        if humMoveDir.Magnitude > 0 then
-            moveVector = humMoveDir
-        else
-            -- Fallback for PC Keyboard
-            if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-                moveVector = moveVector + camCF.LookVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-                moveVector = moveVector - camCF.LookVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-                moveVector = moveVector - camCF.RightVector
-            end
-            if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-                moveVector = moveVector + camCF.RightVector
-            end
+        -- WASD movement relative to camera
+        if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+            moveVector = moveVector + camCF.LookVector
         end
-        
-        -- Vertical movement (Space/Shift for PC, hum.Jump works for Mobile & PC)
-        if UserInputService:IsKeyDown(Enum.KeyCode.Space) or hum.Jump then
+        if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+            moveVector = moveVector - camCF.LookVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+            moveVector = moveVector - camCF.RightVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+            moveVector = moveVector + camCF.RightVector
+        end
+        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
             moveVector = moveVector + Vector3.new(0, 1, 0)
         end
-        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift) then
+        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
             moveVector = moveVector + Vector3.new(0, -1, 0)
         end
         
-        -- Normalize movement
+        -- Normalize horizontal movement
         moveVector = Vector3.new(moveVector.X, moveVector.Y, moveVector.Z)
         if moveVector.Magnitude > 0 then
             moveVector = moveVector.Unit * flySpeed * dt
